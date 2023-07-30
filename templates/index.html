@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Drive Files</title>
+</head>
+<body>
+    <h1>Google Drive Files</h1>
+    <form id="downloadForm" action="/download" method="POST">
+        <ul id="fileList"></ul>
+        <button type="submit">Download Selected Files</button>
+    </form>
+
+    <script>
+        // Function to fetch files from the server and populate the list
+        function fetchFiles() {
+            fetch('/files')
+                .then(response => response.json())
+                .then(data => {
+                    const fileList = document.getElementById('fileList');
+                    fileList.innerHTML = '';
+
+                    data.files.forEach(file => {
+                        const listItem = document.createElement('li');
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.name = 'files';
+                        checkbox.value = file.id;
+                        listItem.appendChild(checkbox);
+                        listItem.appendChild(document.createTextNode(file.name));
+                        fileList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching files:', error));
+        }
+
+        // Call fetchFiles on page load
+        window.addEventListener('load', fetchFiles);
+
+        // Prevent form submission and use AJAX to submit the form data
+        document.getElementById('downloadForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            fetch('/download', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'selected_files.zip';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                // Uncheck all checkboxes after the download is complete
+                const checkboxes = document.querySelectorAll('input[name="files"]');
+                checkboxes.forEach(checkbox => checkbox.checked = false);
+            })
+            .catch(error => console.error('Error downloading files:', error));
+        });
+    </script>
+</body>
+</html>
