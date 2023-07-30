@@ -2,7 +2,7 @@ import os
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
-_API_KEY = "AIzaSyAzF71a3_YdSg66eGggDxWb0EKW7FnvOTI"
+_API_KEY = "KEY_HERE"
 
 
 class GoogleDriveService:
