@@ -5,13 +5,15 @@ on:
 jobs:
   run-pytest:
     runs-on: ubuntu-latest
+    env:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
     steps:
       - name: checkout code from another branch
         uses: actions/checkout@v2
         with:
           ref: controlup_yuli_1
         env:
-          secrets.ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       - name: Setup python
         uses: actions/setup-python@v2
         with:
