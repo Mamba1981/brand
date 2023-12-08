@@ -29,4 +29,6 @@ jobs:
 #          geckodriver --version
       - name: Run tests
         run: |
+          echo "this is working dir"
+          pwd
           pytest
