@@ -9,9 +9,8 @@ jobs:
       - name: checkout code from another branch
         uses: actions/checkout@v2
         with:
-          ref: controlup_yuli_1
-        env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          repository: Mamba1981/controlup_yuli_1
+          token: ${{ secrets.ACCESS_TOKEN }}
       - name: Setup python
         uses: actions/setup-python@v2
         with:
